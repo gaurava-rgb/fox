@@ -29,7 +29,7 @@ export default function MarketingLayout() {
       <Outlet />
       <footer style={{ borderTop: '1px solid var(--line)', marginTop: 80, padding: '40px 0 28px' }}>
         <div className="wrap">
-          <div className="foot-grid" style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 28 }}>
+          <div className="grid2 foot-grid" style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 28 }}>
             <div>
               <div className="row" style={{ gap: 8, marginBottom: 8 }}>
                 <span style={{ width: 22, height: 22, borderRadius: 7, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 11 }}>F</span>
