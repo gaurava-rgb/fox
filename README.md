@@ -16,6 +16,10 @@ npm install
 npm run dev        # http://localhost:5175
 ```
 
+**Live:** https://gaurava-rgb.github.io/fox/
+
+Deploying is automatic: every push to `main` triggers the GitHub Actions workflow (`.github/workflows/deploy.yml`), which builds with `--base=/fox/`, adds a `404.html` SPA fallback for deep links, and publishes to GitHub Pages. To use a custom domain instead: repo **Settings → Pages → Custom domain**, then remove the `/fox` basename logic in `src/router.jsx`.
+
 No backend, no auth, no payments. Sign-in accepts any email. "Subscribe" performs a fake 1.4s checkout and grants credits — which is enough to demonstrate the entire paywall/gating flow end to end.
 
 ## What an adversary gets for free
