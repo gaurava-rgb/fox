@@ -17,7 +17,10 @@ import Reports from './app/Reports.jsx'
 import Billing from './app/Billing.jsx'
 import Settings from './app/Settings.jsx'
 
-export default createBrowserRouter([
+/* GitHub Pages serves this project at /fox/ — detect the subpath so
+   BrowserRouter works locally (root) and on Pages (/fox) alike. */
+const onPages = typeof window !== 'undefined' && window.location.pathname.startsWith('/fox')
+const router = createBrowserRouter([
   {
     element: <MarketingLayout />,
     children: [
@@ -45,4 +48,6 @@ export default createBrowserRouter([
     ],
   },
   { path: '*', element: <Navigate to="/" replace /> },
-])
+], { basename: onPages ? '/fox' : '/' })
+
+export default router

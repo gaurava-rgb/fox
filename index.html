@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foxglove | Be found by the people already searching for you</title>
     <meta name="description" content="Foxglove finds the people asking for what you sell on Reddit, LinkedIn, Facebook groups, and X, drafts replies in your voice, tracks Google and AI answers, and sends a plan every Monday." />
+    <script>
+      /* GitHub Pages SPA fallback: 404.html (a copy of this file marked
+         data-is-404) saves the intended path and bounces to the app root;
+         this script restores it after the bounce. No-op on other hosts. */
+      (function () {
+        try {
+          var saved = sessionStorage.getItem('fox-redirect')
+          if (saved) {
+            sessionStorage.removeItem('fox-redirect')
+            history.replaceState(null, '', saved)
+            return
+          }
+          if (document.documentElement.getAttribute('data-is-404') === '1') {
+            sessionStorage.setItem('fox-redirect', location.pathname + location.search + location.hash)
+            location.replace(location.pathname.indexOf('/fox') === 0 ? '/fox/' : '/')
+          }
+        } catch (e) { /* private mode etc. */ }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
