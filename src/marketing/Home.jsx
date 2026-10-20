@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PLAN_TIERS } from '../mock/jobs.js'
-import { Btn, Chip, Eyebrow, SourceBadge } from '../ui/index.jsx'
+import { Btn, Chip, Eyebrow, SourceBadge, Icons } from '../ui/index.jsx'
 
 const BIZ = 'Pinegrove Roofing & Exteriors'
 
@@ -212,7 +212,7 @@ function HowItWorks() {
           </div>
           <div className="pane" style={{ padding: 16 }}>
             <div className="row" style={{ gap: 10, marginBottom: 10 }}>
-              <span className="src" style={{ color: 'var(--accent)' }}>✳</span>
+              <span className="src" style={{ color: 'var(--accent)' }}><Icons.flower size={14} /></span>
               <span className="eyebrow">Foxglove drafted a reply</span>
             </div>
             <p className="small" style={{ lineHeight: 1.6 }}>{EXAMPLE_REPLY}</p>
@@ -302,7 +302,7 @@ function MondayPlan() {
         <div className="stack" style={{ gap: 14 }}>
           {MONDAY_NOTES.map((n) => (
             <p key={n} className="muted small row" style={{ gap: 10, lineHeight: 1.55 }}>
-              <span style={{ color: 'var(--accent)', flex: 'none' }}>✳</span>
+              <span style={{ color: 'var(--accent)', flex: 'none', display: 'inline-flex' }}><Icons.flower size={13} /></span>
               {n}
             </p>
           ))}

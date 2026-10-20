@@ -46,7 +46,7 @@ function ChatDock({ open, onClose }) {
 
   if (!open) return null
   return (
-    <div className="pane" style={{
+    <div className="pane dock" style={{
       position: 'fixed', right: 20, bottom: 20, width: 420, maxHeight: '72vh',
       display: 'flex', flexDirection: 'column', zIndex: 60, boxShadow: '0 24px 64px -24px rgba(0,0,0,.7)',
     }}>
@@ -69,7 +69,7 @@ function ChatDock({ open, onClose }) {
         ))}
         {phase && (
           <div className="fade-in muted small" style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '4px 2px' }}>
-            <span className="spin">◌</span> {phase}
+            <span className="spinner" /> {phase}
           </div>
         )}
       </div>
@@ -115,6 +115,21 @@ function UpdatesMenu({ open, onClose }) {
   )
 }
 
+const BellIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flex: 'none' }}>
+    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+  </svg>
+)
+const Chevron = ({ up }) => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"
+    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+    style={{ transform: up ? 'rotate(180deg)' : 'none', flex: 'none' }}>
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+)
+
 const NAV = [
   { to: `/projects/demo/summary`, label: 'Dashboard', end: false },
   { to: `/projects/demo/assets`, label: 'Assets' },
@@ -145,42 +160,44 @@ export default function AppLayout() {
   return (
     <div className="app" style={{ display: 'flex', minHeight: '100vh' }}>
       {/* rail */}
-      <aside style={{ width: 224, background: 'var(--rail)', borderRight: '1px solid var(--line)', padding: '18px 14px', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh' }}>
+      <aside className="rail">
         <div className="row" style={{ gap: 8, marginBottom: 18 }}>
           <span style={{ width: 22, height: 22, borderRadius: 6, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800 }}>F</span>
-          <strong>Foxglove</strong>
+          <strong className="rail-word">Foxglove</strong>
         </div>
         <div className="row" style={{ gap: 10, padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 12, marginBottom: 14 }}>
           <span style={{ width: 26, height: 26, borderRadius: 8, background: '#2f2920', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700 }}>P</span>
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontSize: '0.84rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{getBusiness().name}</div>
-            <div className="faint small">1 business</div>
+            <div className="rail-word" style={{ fontSize: '0.84rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{getBusiness().name}</div>
+            <div className="rail-sub faint small">1 business</div>
           </div>
         </div>
-        <button className="btn btn--ghost btn--sm" style={{ marginBottom: 12, width: '100%', justifyContent: 'center' }}>+ New chat</button>
+        <button className="btn btn--ghost btn--sm" style={{ marginBottom: 12, width: '100%', justifyContent: 'center' }}>+ <span className="rail-word">New chat</span></button>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {NAV.map((n) => (
-            <NavLink key={n.to} to={n.to} className={({ isActive }) => `tab ${isActive ? 'tab--on' : ''}`} style={{ borderRadius: 9, border: 0, background: 'none', textAlign: 'left', padding: '8px 10px' }}>{n.label}</NavLink>
+            <NavLink key={n.to} to={n.to} className={({ isActive }) => `tab ${isActive ? 'tab--on' : ''}`} style={{ borderRadius: 9, border: 0, background: 'none', textAlign: 'left', padding: '8px 10px' }}><span className="rail-word">{n.label}</span></NavLink>
           ))}
-          <button className="tab" style={{ textAlign: 'left', padding: '8px 10px', border: 0, background: 'none' }} onClick={() => setMoreOpen(!moreOpen)}>More {moreOpen ? '▴' : '▾'}</button>
+          <button className="tab" style={{ textAlign: 'left', padding: '8px 10px', border: 0, background: 'none', display: 'flex', alignItems: 'center', gap: 8 }} onClick={() => setMoreOpen(!moreOpen)}>
+            <span className="rail-word">More</span> <Chevron up={moreOpen} />
+          </button>
           {moreOpen && MORE.map((m) => (
-            <NavLink key={m.to} to={m.to} className={({ isActive }) => `tab ${isActive ? 'tab--on' : ''}`} style={{ borderRadius: 9, border: 0, background: 'none', textAlign: 'left', padding: '8px 10px 8px 22px', fontSize: '0.8rem' }}>{m.label}</NavLink>
+            <NavLink key={m.to} to={m.to} className={({ isActive }) => `tab ${isActive ? 'tab--on' : ''}`} style={{ borderRadius: 9, border: 0, background: 'none', textAlign: 'left', padding: '8px 10px 8px 22px', fontSize: '0.8rem' }}><span className="rail-word">{m.label}</span></NavLink>
           ))}
         </nav>
         <div style={{ flex: 1 }} />
         <div className="eyebrow" style={{ marginBottom: 6 }}>Conversations</div>
-        <p className="faint small" style={{ marginBottom: 14 }}>You have no conversations yet.</p>
-        <button className="tab" style={{ textAlign: 'left', padding: '8px 10px', border: 0, background: 'none' }} onClick={() => setUpdatesOpen(!updatesOpen)}>🔔 Updates</button>
+        <p className="rail-sub faint small" style={{ marginBottom: 14 }}>You have no conversations yet.</p>
+        <button className="tab" style={{ textAlign: 'left', padding: '8px 10px', border: 0, background: 'none', display: 'flex', alignItems: 'center', gap: 8 }} onClick={() => setUpdatesOpen(!updatesOpen)}><BellIcon /> <span className="rail-word">Updates</span></button>
         <div className="row" style={{ gap: 8, marginTop: 8, padding: '8px 10px' }}>
           <span style={{ width: 26, height: 26, borderRadius: 99, background: '#4b197f', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700 }}>DW</span>
-          <span className="small">Dana · <Link to="/settings" className="faint">Settings</Link></span>
+          <span className="small rail-word">Dana · <Link to="/settings" className="faint">Settings</Link></span>
         </div>
       </aside>
 
       {/* main */}
-      <main style={{ flex: 1, minWidth: 0, padding: '26px 30px', paddingBottom: 90 }}>
+      <main className="main">
         {onProject && (
-          <div className="row" style={{ marginBottom: 16, gap: 0 }}>
+          <div className="tabs ptabs" style={{ marginBottom: 16 }}>
             {tabs.map((t) => (
               <Link key={t.key} to={`/projects/${pid}/${t.key}`} className={`tab ${pathname.includes(`/${t.key}`) ? 'tab--on' : ''}`}>{t.label}</Link>
             ))}

@@ -36,7 +36,7 @@ function ConnectorRow({ c, connected, onConnect }) {
   return (
     <div className="row" style={{ padding: '13px 2px', borderBottom: '1px solid var(--line)', gap: 12 }}>
       <span className="src">{c.name.charAt(0)}</span>
-      <strong style={{ minWidth: 215, fontSize: '0.92rem', fontWeight: 600 }}>{c.name}</strong>
+      <strong style={{ minWidth: 0, flex: '1 1 160px', fontSize: '0.92rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.name}</strong>
       {c.note
         ? <p className="muted small" style={{ flex: 1, lineHeight: 1.45 }}>{c.note}</p>
         : <span style={{ flex: 1 }} />}
@@ -114,11 +114,11 @@ export default function Connectors() {
               onChange={(e) => setQuery(e.target.value)}
               style={{ flex: 1 }}
             />
-            <select className="field" value={cat} onChange={(e) => setCat(e.target.value)} style={{ width: 190 }}>
+            <select className="field sel" value={cat} onChange={(e) => setCat(e.target.value)}>
               <option value="all">All categories</option>
               {categories.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
-            <select className="field" value={stateFilter} onChange={(e) => setStateFilter(e.target.value)} style={{ width: 175 }}>
+            <select className="field sel" value={stateFilter} onChange={(e) => setStateFilter(e.target.value)}>
               <option value="all">All states</option>
               <option value="ready">Ready to connect</option>
               <option value="coming">Coming soon</option>

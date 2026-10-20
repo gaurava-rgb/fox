@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getBillingSummary, subscribe, topUp, cancelPlan } from '../mock/api.js'
 import { PLAN_TIERS, TOPUP_PACKS, PILOT_MONTH_CREDITS } from '../mock/jobs.js'
-import { Eyebrow, Pane, Btn, Chip, Pill, Metric } from '../ui/index.jsx'
+import { Eyebrow, Pane, Btn, Chip, Pill, Metric , Spinner } from '../ui/index.jsx'
 
 /* ---------- No plan: the three tier cards ---------- */
 function TierCards({ busy, onSubscribe }) {
@@ -17,7 +17,7 @@ function TierCards({ busy, onSubscribe }) {
           </div>
           <p className="muted small" style={{ margin: '6px 0 18px' }}>{t.credits.toLocaleString()} credits each month</p>
           {busy === tier ? (
-            <Btn solid disabled style={{ marginTop: 'auto' }}><span className="spin">◌</span> Subscribing…</Btn>
+            <Btn solid disabled style={{ marginTop: 'auto' }}><Spinner /> Subscribing…</Btn>
           ) : (
             <Btn solid style={{ marginTop: 'auto' }} onClick={() => onSubscribe(tier)}>Subscribe</Btn>
           )}
@@ -110,7 +110,7 @@ export default function Billing() {
                   <div className="mono" style={{ fontSize: '1.3rem', fontWeight: 600 }}>{p.credits.toLocaleString()} credits</div>
                   <p className="muted small" style={{ margin: '6px 0 14px' }}>${p.usd} one time</p>
                   {busy === `top${i}` ? (
-                    <Btn solid disabled><span className="spin">◌</span> Topping up…</Btn>
+                    <Btn solid disabled><Spinner /> Topping up…</Btn>
                   ) : (
                     <Btn solid onClick={() => doTopUp(i)}>Top up</Btn>
                   )}
@@ -122,7 +122,7 @@ export default function Billing() {
           <div className="row row--between" style={{ alignItems: 'center' }}>
             <p className="faint small">Credits refill on your billing day. Top-ups never expire. Work pauses at zero.</p>
             {busy === 'cancel'
-              ? <Btn ghost disabled><span className="spin">◌</span> Cancelling…</Btn>
+              ? <Btn ghost disabled><Spinner /> Cancelling…</Btn>
               : <Btn ghost onClick={doCancel}>Cancel plan</Btn>}
           </div>
         </>

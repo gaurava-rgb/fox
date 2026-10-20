@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Eyebrow, Pane, Btn, Chip, Pill, SourceBadge, Metric, LockNote } from '../ui/index.jsx'
+import { Eyebrow, Pane, Btn, Chip, Pill, SourceBadge, Metric, LockNote , Spinner } from '../ui/index.jsx'
 import { ALERT_KINDS } from '../mock/jobs.js'
 import {
   getBusiness, entitled, listJobs, runJob, listSources, listSearches,
@@ -49,7 +49,7 @@ function JobRow({ job, run, onRun }) {
         <div style={{ minWidth: 0, flex: 1 }}>
           <div className="small" style={{ fontWeight: 600 }}>{job.name}</div>
           <div className="faint small" style={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
-            {run?.state === 'running' && <span className="spin">◌</span>}{lastRun}
+            {run?.state === 'running' && <Spinner />}{lastRun}
           </div>
         </div>
         <div className="row" style={{ flexWrap: 'wrap', justifyContent: 'flex-end' }}>

@@ -15,7 +15,7 @@ export default function MarketingLayout() {
             <span style={{ width: 26, height: 26, borderRadius: 8, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>F</span>
             <strong style={{ letterSpacing: '-0.01em' }}>Foxglove</strong>
           </Link>
-          <nav className="row" style={{ gap: 22 }}>
+          <nav className="row mk-nav" style={{ gap: 22 }}>
             {nav.map((n) => (
               <NavLink key={n.to} to={n.to} end={n.to === '/'} className={({ isActive }) => (isActive && n.to !== '/' ? 'link-arrow' : 'muted')} style={{ fontSize: '0.9rem' }}>{n.label}</NavLink>
             ))}
@@ -29,7 +29,7 @@ export default function MarketingLayout() {
       <Outlet />
       <footer style={{ borderTop: '1px solid var(--line)', marginTop: 80, padding: '40px 0 28px' }}>
         <div className="wrap">
-          <div className="grid2" style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 28 }}>
+          <div className="foot-grid" style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 28 }}>
             <div>
               <div className="row" style={{ gap: 8, marginBottom: 8 }}>
                 <span style={{ width: 22, height: 22, borderRadius: 7, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 11 }}>F</span>

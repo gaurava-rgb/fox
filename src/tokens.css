@@ -32,6 +32,7 @@ input, textarea { font: inherit; }
   --r-pane: 14px;
   background: var(--bg);
   color: var(--ink);
+  color-scheme: dark;
   min-height: 100vh;
 }
 
@@ -40,22 +41,23 @@ input, textarea { font: inherit; }
   --bg: #fbfaff;
   --panel: #ffffff;
   --ink: #1d1b2e;
-  --muted: rgba(29, 27, 46, 0.62);
-  --faint: rgba(29, 27, 46, 0.42);
+  --muted: rgba(29, 27, 46, 0.78);
+  --faint: rgba(29, 27, 46, 0.55);
   --accent: #7a89e6;
   --accent-ink: #12122a;
   --line: rgba(29, 27, 46, 0.12);
   --r-pane: 18px;
   background: var(--bg);
   color: var(--ink);
+  color-scheme: light;
   min-height: 100vh;
 }
 
 /* ---------- shared type ---------- */
 .eyebrow {
-  font-size: 0.66rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--faint);
 }
@@ -161,6 +163,26 @@ input, textarea { font: inherit; }
 .field:focus { border-color: var(--accent); }
 .field::placeholder { color: var(--faint); }
 
+/* ---------- app shell layout (kept in CSS so media queries can override) --- */
+.rail {
+  width: 224px; flex: none;
+  background: var(--rail);
+  border-right: 1px solid var(--line);
+  padding: 18px 14px;
+  display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh;
+}
+.main { flex: 1; min-width: 0; padding: 26px 30px 90px; }
+
+/* grid blowout guard: items must be allowed to shrink below min-content */
+.grid2 > *, .grid3 > *, .grid2, .grid3 { min-width: 0; }
+.pane { min-width: 0; }
+
+/* tab rows wrap instead of overflowing (ui Tabs + project tabs) */
+.tabs, .ptabs { flex-wrap: wrap; }
+.ptabs { display: flex; gap: 2px; margin-bottom: 16px; }
+.sel { width: auto; flex: 1 1 150px; min-width: 0; }
+
 /* ---------- misc ---------- */
 .kbd { border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; font-size: 0.7rem; color: var(--muted); }
 .spin { animation: spin 1s linear infinite; display: inline-block; }
@@ -168,3 +190,92 @@ input, textarea { font: inherit; }
 .fade-in { animation: fade 0.35s ease; }
 @keyframes fade { from { opacity: 0; transform: translateY(4px); } }
 .scroll-y { overflow-y: auto; }
+
+/* ============================================================
+   UI/UX Pro Max polish layer
+   (focus visibility, reduced motion, touch targets, contrast,
+    hover affordance, responsive breakpoints, SVG spinner)
+   ============================================================ */
+
+/* --- keyboard focus rings (never removed without replacement) --- */
+.btn:focus-visible, .chip:focus-visible, .tab:focus-visible,
+.field:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+/* --- selection --- */
+::selection { background: rgba(122, 137, 230, 0.35); }
+
+/* --- respect motion preferences --- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- hover affordance without layout shift --- */
+.pane--hover { cursor: pointer; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.app .pane--hover:hover { border-color: rgba(122, 137, 230, 0.55); box-shadow: 0 10px 30px -16px rgba(0, 0, 0, 0.55); }
+.mk  .pane--hover:hover { border-color: rgba(122, 137, 230, 0.5);  box-shadow: 0 14px 36px -18px rgba(29, 27, 46, 0.3); }
+
+.chip, .tab { transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease; }
+button.chip:hover, .tab:hover { color: var(--ink); border-color: var(--accent); }
+
+/* --- minimum touch targets (44px) --- */
+.tab, button.chip { min-height: 40px; display: inline-flex; align-items: center; }
+.app nav .tab { min-height: 40px; }
+
+/* --- SVG spinner (replaces the ◌ glyph) --- */
+.spinner {
+  width: 13px; height: 13px; flex: none;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: currentColor;
+  animation: spin 0.7s linear infinite;
+}
+.app .spinner { border-color: rgba(255, 255, 255, 0.2); border-top-color: var(--accent); }
+.btn--solid .spinner { border-color: rgba(18, 18, 42, 0.25); border-top-color: var(--accent-ink); }
+
+/* --- native scrollbars --- */
+.app .scroll-y::-webkit-scrollbar, .scroll-y::-webkit-scrollbar { width: 8px; }
+.app .scroll-y::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 8px; }
+
+/* --- responsive: tablets --- */
+@media (max-width: 1024px) {
+  .grid3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- responsive: phones + narrow tablets --- */
+@media (max-width: 860px) {
+  .grid2, .grid3 { grid-template-columns: 1fr; }
+
+  /* collapse the app rail to an icon strip */
+  .rail { width: 62px !important; padding: 14px 8px !important; }
+  .main { padding: 18px 14px 90px !important; }
+  .ptabs .tab, .tabs .tab { padding: 8px 10px; font-size: 0.8rem; }
+  .row { flex-wrap: wrap; }
+  .rail-word, .rail-sub, .app nav .tab .rail-word,
+  .app > aside .eyebrow, .app > aside > .row .small { display: none; }
+  .app nav .tab { justify-content: center; padding: 10px 0; }
+  .app > aside .pane--railwide { display: none; }
+  .app > main { padding: 18px 14px 90px; }
+
+  /* chat dock nearly full width */
+  .dock { right: 10px !important; left: 76px; width: auto !important; }
+}
+
+@media (max-width: 640px) {
+  .h1 { font-size: 1.55rem; }
+  .h2 { font-size: 1.2rem; }
+  .lede { font-size: 0.92rem; }
+  .wrap { padding: 0 16px; }
+  .mk header .row { gap: 10px; }
+  .mk header nav.mk-nav { display: none; }
+  .foot-grid { grid-template-columns: 1fr 1fr !important; }
+  .dock { left: 10px; }
+}

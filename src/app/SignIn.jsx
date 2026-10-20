@@ -9,7 +9,7 @@ export default function SignIn() {
   const go = (e) => { e.preventDefault(); store.signIn(); nav('/projects/demo/summary') }
   return (
     <div className="app" style={{ display: 'grid', placeItems: 'center', minHeight: '100vh' }}>
-      <div className="pane" style={{ width: 380, padding: 28 }}>
+      <div className="pane" style={{ width: 'min(380px, calc(100vw - 32px))', padding: 28 }}>
         <div className="row" style={{ gap: 8, marginBottom: 18 }}>
           <span style={{ width: 26, height: 26, borderRadius: 8, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>F</span>
           <strong>Foxglove</strong>

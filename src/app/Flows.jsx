@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { listFlows, entitled } from '../mock/api.js'
-import { Eyebrow, Pane, Btn, Chip, Pill, EmptyState, Tabs, LockNote } from '../ui/index.jsx'
+import { Eyebrow, Pane, Btn, Chip, Pill, EmptyState, Tabs, LockNote , Spinner } from '../ui/index.jsx'
 
 const TABS = [
   { key: 'create', label: 'Create a flow' },
@@ -66,7 +66,7 @@ function FlowPanel({ flow, onClose, onFinished }) {
           onChange={(e) => setInput(e.target.value)}
         />
         <Btn solid onClick={run} disabled={busy}>
-          {busy ? <><span className="spin">◌</span> Running…</> : 'Run'}
+          {busy ? <><Spinner /> Running…</> : 'Run'}
         </Btn>
       </div>
 
@@ -81,7 +81,7 @@ function FlowPanel({ flow, onClose, onFinished }) {
 
       {busy && (
         <p className="muted small fade-in" style={{ marginTop: 12, display: 'flex', gap: 8, alignItems: 'center' }}>
-          <span className="spin">◌</span> {phase === 'looking' ? LOOKING[flow.key] || 'Looking at what people are saying…' : 'Writing…'}
+          <Spinner /> {phase === 'looking' ? LOOKING[flow.key] || 'Looking at what people are saying…' : 'Writing…'}
         </p>
       )}
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { listDocuments } from '../mock/api.js'
-import { Eyebrow, Pane, Btn, Pill, EmptyState, Tabs } from '../ui/index.jsx'
+import { Eyebrow, Pane, Btn, Pill, EmptyState, Tabs , Spinner } from '../ui/index.jsx'
 
 const TABS = [
   { key: 'all', label: 'All' },
@@ -48,7 +48,7 @@ function SharePane() {
       <div className="row">
         <input className="field" defaultValue="https://pinegrove-roofing.example.com" placeholder="https://your-website.com" />
         {site === 'idle' && <Btn solid onClick={readSite}>Read website</Btn>}
-        {site === 'reading' && <Btn solid disabled><span className="spin">◌</span> Reading…</Btn>}
+        {site === 'reading' && <Btn solid disabled><Spinner /> Reading…</Btn>}
         {site === 'read' && <Pill tone="green">Read 14 pages</Pill>}
       </div>
 
@@ -64,7 +64,7 @@ function SharePane() {
       <textarea className="field" placeholder="Source text" rows={3} style={{ marginBottom: 12, resize: 'vertical' }} />
       <div className="row">
         {notes === 'idle' && <Btn solid onClick={readNotes}>Read notes</Btn>}
-        {notes === 'reading' && <Btn solid disabled><span className="spin">◌</span> Reading…</Btn>}
+        {notes === 'reading' && <Btn solid disabled><Spinner /> Reading…</Btn>}
         {notes === 'read' && <Pill tone="green">Saved to your business details</Pill>}
       </div>
     </Pane>
