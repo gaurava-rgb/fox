@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useParams } from 'react-router-dom'
 import { chatStream, getBusiness, listUpdates, store } from '../mock/api.js'
 import { ALERT_KINDS } from '../mock/jobs.js'
-import { Pill } from '../ui/index.jsx'
+import { Pill, Mark, Icons } from '../ui/index.jsx'
 
 /* ---------- Chat dock: "Your AI CMO" ----------
    Reproduces the SSE behavior recovered from the bundle:
@@ -131,16 +131,16 @@ const Chevron = ({ up }) => (
 )
 
 const NAV = [
-  { to: `/projects/demo/summary`, label: 'Dashboard', end: false },
-  { to: `/projects/demo/assets`, label: 'Assets' },
-  { to: `/projects/demo/connectors`, label: 'Connectors' },
+  { to: `/projects/demo/summary`, label: 'Dashboard', icon: 'home', end: false },
+  { to: `/projects/demo/assets`, label: 'Assets', icon: 'doc' },
+  { to: `/projects/demo/connectors`, label: 'Connectors', icon: 'plug' },
 ]
 const MORE = [
-  { to: `/projects/demo/graph`, label: 'Graph' },
-  { to: `/projects/demo/flows`, label: 'Flows' },
-  { to: `/projects/demo/reports/search-visibility`, label: 'Reports' },
-  { to: `/billing`, label: 'Billing' },
-  { to: `/settings`, label: 'Settings' },
+  { to: `/projects/demo/graph`, label: 'Graph', icon: 'graph' },
+  { to: `/projects/demo/flows`, label: 'Flows', icon: 'flow' },
+  { to: `/projects/demo/reports/search-visibility`, label: 'Reports', icon: 'chart' },
+  { to: `/billing`, label: 'Billing', icon: 'card' },
+  { to: `/settings`, label: 'Settings', icon: 'settings' },
 ]
 
 export default function AppLayout() {
@@ -161,35 +161,75 @@ export default function AppLayout() {
     <div className="app" style={{ display: 'flex', minHeight: '100vh' }}>
       {/* rail */}
       <aside className="rail">
-        <div className="row" style={{ gap: 8, marginBottom: 18 }}>
-          <span style={{ width: 22, height: 22, borderRadius: 6, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800 }}>F</span>
-          <strong className="rail-word">Foxglove</strong>
+        <div className="row" style={{ gap: 9, marginBottom: 20, paddingLeft: 2 }}>
+          <Mark size={16} />
+          <span className="wordmark rail-word" style={{ fontSize: '0.8rem', letterSpacing: '0.14em' }}>Foxglove</span>
         </div>
-        <div className="row" style={{ gap: 10, padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 12, marginBottom: 14 }}>
-          <span style={{ width: 26, height: 26, borderRadius: 8, background: '#2f2920', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700 }}>P</span>
+        <div className="row" style={{ gap: 10, padding: '9px 11px', border: '1px solid var(--line)', borderRadius: 8, marginBottom: 14 }}>
+          <span style={{ width: 25, height: 25, borderRadius: 5, border: '1px solid var(--line-strong)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Fraunces, Georgia, serif', fontSize: 12, fontWeight: 600, color: 'var(--accent)', flex: 'none' }}>P</span>
           <div style={{ minWidth: 0 }}>
             <div className="rail-word" style={{ fontSize: '0.84rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{getBusiness().name}</div>
             <div className="rail-sub faint small">1 business</div>
           </div>
         </div>
-        <button className="btn btn--ghost btn--sm" style={{ marginBottom: 12, width: '100%', justifyContent: 'center' }}>+ <span className="rail-word">New chat</span></button>
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <button className="btn btn--ghost btn--sm" style={{ marginBottom: 12, width: '100%', justifyContent: 'center' }}>
+          <Icons.plus size={13} /> <span className="rail-word">New chat</span>
+        </button>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           {NAV.map((n) => (
-            <NavLink key={n.to} to={n.to} className={({ isActive }) => `tab ${isActive ? 'tab--on' : ''}`} style={{ borderRadius: 9, border: 0, background: 'none', textAlign: 'left', padding: '8px 10px' }}><span className="rail-word">{n.label}</span></NavLink>
+            <NavLink
+              key={n.to}
+              to={n.to}
+              className={({ isActive }) => `tab${isActive ? ' tab--on' : ''}`}
+              style={({ isActive }) => ({
+                border: 0,
+                background: isActive ? 'var(--accent-wash)' : 'none',
+                textAlign: 'left',
+                padding: '8px 10px',
+                borderRadius: 6,
+                marginBottom: 0,
+                gap: 10,
+              })}
+            >
+              <span className="rail-icon muted" style={{ display: 'inline-flex' }}>{Icons[n.icon]({ size: 15 })}</span>
+              <span className="rail-word">{n.label}</span>
+            </NavLink>
           ))}
-          <button className="tab" style={{ textAlign: 'left', padding: '8px 10px', border: 0, background: 'none', display: 'flex', alignItems: 'center', gap: 8 }} onClick={() => setMoreOpen(!moreOpen)}>
-            <span className="rail-word">More</span> <Chevron up={moreOpen} />
+          <button
+            className="tab"
+            style={{ textAlign: 'left', padding: '8px 10px', border: 0, background: 'none', display: 'flex', alignItems: 'center', gap: 10, borderRadius: 6 }}
+            onClick={() => setMoreOpen(!moreOpen)}
+          >
+            <span className="rail-icon muted" style={{ display: 'inline-flex' }}>{Icons.bloom({ size: 15 })}</span>
+            <span className="rail-word">More</span>
+            <span style={{ marginLeft: 'auto', display: 'inline-flex', opacity: 0.6 }}><Chevron up={moreOpen} /></span>
           </button>
           {moreOpen && MORE.map((m) => (
-            <NavLink key={m.to} to={m.to} className={({ isActive }) => `tab ${isActive ? 'tab--on' : ''}`} style={{ borderRadius: 9, border: 0, background: 'none', textAlign: 'left', padding: '8px 10px 8px 22px', fontSize: '0.8rem' }}><span className="rail-word">{m.label}</span></NavLink>
+            <NavLink
+              key={m.to}
+              to={m.to}
+              className={({ isActive }) => `tab${isActive ? ' tab--on' : ''}`}
+              style={({ isActive }) => ({
+                border: 0,
+                background: isActive ? 'var(--accent-wash)' : 'none',
+                textAlign: 'left',
+                padding: '7px 10px 7px 20px',
+                fontSize: '0.8rem',
+                borderRadius: 6,
+                gap: 9,
+              })}
+            >
+              <span className="rail-icon muted" style={{ display: 'inline-flex' }}>{Icons[m.icon]({ size: 13 })}</span>
+              <span className="rail-word">{m.label}</span>
+            </NavLink>
           ))}
         </nav>
         <div style={{ flex: 1 }} />
         <div className="eyebrow" style={{ marginBottom: 6 }}>Conversations</div>
         <p className="rail-sub faint small" style={{ marginBottom: 14 }}>You have no conversations yet.</p>
-        <button className="tab" style={{ textAlign: 'left', padding: '8px 10px', border: 0, background: 'none', display: 'flex', alignItems: 'center', gap: 8 }} onClick={() => setUpdatesOpen(!updatesOpen)}><BellIcon /> <span className="rail-word">Updates</span></button>
-        <div className="row" style={{ gap: 8, marginTop: 8, padding: '8px 10px' }}>
-          <span style={{ width: 26, height: 26, borderRadius: 99, background: '#4b197f', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700 }}>DW</span>
+        <button className="tab" style={{ textAlign: 'left', padding: '8px 10px', border: 0, background: 'none', display: 'flex', alignItems: 'center', gap: 10 }} onClick={() => setUpdatesOpen(!updatesOpen)}><BellIcon /> <span className="rail-word">Updates</span></button>
+        <div className="row" style={{ gap: 9, marginTop: 8, padding: '8px 10px' }}>
+          <span style={{ width: 25, height: 25, borderRadius: 99, background: 'var(--accent-wash)', color: 'var(--accent)', border: '1px solid var(--line)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 9.5, fontWeight: 700, flex: 'none', letterSpacing: '0.02em' }}>DW</span>
           <span className="small rail-word">Dana · <Link to="/settings" className="faint">Settings</Link></span>
         </div>
       </aside>
@@ -206,7 +246,12 @@ export default function AppLayout() {
         <Outlet />
       </main>
 
-      <button className="btn btn--solid" style={{ position: 'fixed', right: 20, bottom: 20, zIndex: 50, borderRadius: 999, boxShadow: '0 12px 32px -12px rgba(122,137,230,.8)' }} onClick={() => setChatOpen(!chatOpen)}>
+      <button
+        className="btn btn--solid"
+        style={{ position: 'fixed', right: 20, bottom: 20, zIndex: 50, borderRadius: 999, paddingLeft: 18, boxShadow: '0 14px 34px -14px rgba(199,123,184,.55)' }}
+        onClick={() => setChatOpen(!chatOpen)}
+      >
+        <Icons.bloom size={14} />
         Ask Foxglove
       </button>
       <ChatDock open={chatOpen} onClose={() => setChatOpen(false)} />

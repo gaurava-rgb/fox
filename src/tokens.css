@@ -1,169 +1,465 @@
-/* Foxglove — design tokens recovered from Perrywinkle recon.
-   Two languages, one product: light marketing shell, dark product shell. */
+/* ============================================================================
+   Foxglove — Editorial design system
+   ----------------------------------------------------------------------------
+   One idea: printed matter, not SaaS dashboard.
+
+   Display type is a high-contrast serif (Fraunces) set large and tight.
+   Everything else is a neutral grotesque (Instrument Sans). Labels and figures
+   are mono (JetBrains Mono) so numbers behave like spec sheets.
+   Colour is ink on bone paper, with a single foxglove accent used as light,
+   not as paint.
+
+   Two shells, one language:
+     .mk   — light marketing / editorial paper
+     .app  — dark product / warm black
+   ========================================================================== */
 
 * { box-sizing: border-box; margin: 0; }
 
 html, body, #root { height: 100%; }
+
 body {
-  font-family: "Inter", "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Instrument Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: #1a1a1a;
-  color: #ededf0;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  background: #14120f;
+  color: #f4efe6;
 }
 
 a { color: inherit; text-decoration: none; }
 button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
 input, textarea { font: inherit; }
 
-/* ============ DARK APP THEME (recon: #1A1A1A page / #121212 rail / #272727 cards) ============ */
+/* ============================================================================
+   1. THEMES
+   ========================================================================== */
+
+/* ---------- DARK PRODUCT SHELL ---------- */
 .app {
-  --bg: #1a1a1a;
-  --rail: #121212;
-  --card: #272727;
-  --line: rgba(255, 255, 255, 0.09);
-  --ink: #ededf0;
-  --muted: rgba(237, 237, 240, 0.6);
-  --faint: rgba(237, 237, 240, 0.4);
-  --accent: #7a89e6;           /* periwinkle */
-  --accent-ink: #12122a;
-  --yellow: #e9d951;
-  --green: #7bd88f;
-  --red: #e86a6a;
-  --r-pane: 14px;
+  --bg: #14120f;
+  --rail: #0d0b09;
+  --card: #221d17;
+  --card-hi: #29231b;
+
+  --ink: #f4efe6;
+  --muted: rgba(244, 239, 230, 0.64);
+  --faint: rgba(244, 239, 230, 0.42);
+
+  --line: rgba(244, 239, 230, 0.11);
+  --line-strong: rgba(244, 239, 230, 0.2);
+
+  --accent: #c77bb8;              /* foxglove, lifted for dark legibility */
+  --accent-ink: #1a0f17;
+  --accent-wash: rgba(199, 123, 184, 0.12);
+
+  --green: #8fc9a0;
+  --yellow: #e0bd6a;
+  --red: #e0887f;
+
+  --r-pane: 10px;
+  --r-ctl: 8px;
+
   background: var(--bg);
   color: var(--ink);
   color-scheme: dark;
   min-height: 100vh;
 }
 
-/* ============ LIGHT MARKETING THEME (recon: #FBFAFF bg / #f0edf8 theme) ============ */
+/* ---------- LIGHT EDITORIAL SHELL ---------- */
 .mk {
-  --bg: #fbfaff;
-  --panel: #ffffff;
-  --ink: #1d1b2e;
-  --muted: rgba(29, 27, 46, 0.78);
-  --faint: rgba(29, 27, 46, 0.55);
-  --accent: #7a89e6;
-  --accent-ink: #12122a;
-  --line: rgba(29, 27, 46, 0.12);
-  --r-pane: 18px;
+  --bg: #faf7f0;                  /* bone */
+  --panel: #fffdf8;
+  --band: #f3ede1;                /* deeper cream, for full-bleed bands */
+  --rail: #f3ede1;
+
+  --ink: #17140f;
+  --muted: rgba(23, 20, 15, 0.70);
+  --faint: rgba(23, 20, 15, 0.50);
+
+  --line: rgba(23, 20, 15, 0.14);
+  --line-strong: rgba(23, 20, 15, 0.28);
+
+  --accent: #7a2e6e;              /* foxglove, printed */
+  --accent-ink: #fffdf8;
+  --accent-wash: #f0e4ee;
+
+  --green: #3f6b4f;
+  --yellow: #8a6208;
+  --red: #9d3b32;
+
+  --r-pane: 12px;
+  --r-ctl: 8px;
+
   background: var(--bg);
   color: var(--ink);
   color-scheme: light;
   min-height: 100vh;
 }
 
-/* ---------- shared type ---------- */
-.eyebrow {
-  font-size: 0.7rem;
+/* ============================================================================
+   2. TYPE
+   ========================================================================== */
+
+/* Display: high-contrast serif. Optical sizing does the work at large sizes. */
+.display, .h1, h1 {
+  font-family: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 96;
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.h1 { font-size: clamp(2rem, 3.4vw, 2.85rem); margin: 10px 0 6px; }
+
+/* The hero line. Deliberately much larger than h1 so pages have a top note. */
+.display-xl {
+  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 144;
+  font-weight: 440;
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  letter-spacing: -0.012em;
+  word-spacing: 0.045em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+/* Section headings stay serif but drop in weight relationship. */
+.h2 {
+  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 40;
+  font-size: clamp(1.45rem, 2.5vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.016em;
+  line-height: 1.16;
+  text-wrap: balance;
+}
+
+/* Small headings switch to the grotesque — the editorial sans/serif contrast. */
+.h3 {
+  font-family: "Instrument Sans", "Inter", system-ui, sans-serif;
+  font-size: 0.97rem;
   font-weight: 600;
-  letter-spacing: 0.26em;
+  letter-spacing: -0.005em;
+  line-height: 1.35;
+}
+
+.lede {
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.62;
+  max-width: 58ch;
+  text-wrap: pretty;
+}
+
+/* Mono eyebrow: spec-sheet labelling. */
+.eyebrow {
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.645rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--faint);
+  font-feature-settings: "case" 1;
 }
-.h1 { font-size: 1.9rem; font-weight: 300; letter-spacing: -0.01em; margin: 6px 0 4px; }
-.h2 { font-size: 1.35rem; font-weight: 400; letter-spacing: -0.005em; }
-.h3 { font-size: 1rem; font-weight: 600; }
-.lede { color: var(--muted); font-size: 0.95rem; line-height: 1.55; max-width: 56ch; }
+
 .muted { color: var(--muted); }
 .faint { color: var(--faint); }
-.small { font-size: 0.8rem; }
-.mono { font-variant-numeric: tabular-nums; }
+.small { font-size: 0.825rem; line-height: 1.55; }
 
-/* ---------- panes / cards ---------- */
+.mono, .num {
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Section index numerals: 01, 02, 03 — used beside section eyebrows. */
+.num {
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+::selection { background: var(--accent-wash); color: var(--ink); }
+.app ::selection { background: rgba(199, 123, 184, 0.3); color: var(--ink); }
+
+/* ============================================================================
+   3. SURFACES
+   ========================================================================== */
+
 .pane {
-  background: var(--card, var(--panel));
+  background: var(--panel, var(--card));
   border: 1px solid var(--line);
   border-radius: var(--r-pane);
   padding: 20px;
+  min-width: 0;
 }
+
+/* Paper stock: white sheet laid on bone, hairline rule, barely-there lift. */
 .mk .pane {
   background: var(--panel);
-  box-shadow: 0 1px 2px rgba(29, 27, 46, 0.05), 0 12px 32px -18px rgba(29, 27, 46, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(23, 20, 15, 0.04),
+    0 14px 34px -22px rgba(23, 20, 15, 0.22);
 }
+
+/* Card in dark shell: hairline + top highlight, no drop shadow muddiness. */
+.app .pane {
+  background: var(--card);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
 .pane--pad { padding: 22px; }
 
-/* ---------- chips & pills ---------- */
+/* Feature surface — for the one card per page that should read first. */
+.pane--feature {
+  background: var(--band, var(--card-hi));
+  border-color: var(--line-strong);
+}
+.mk .pane--feature { background: #fffdf8; }
+
+/* Quiet surface — secondary, no border weight. */
+.pane--quiet { background: transparent; border-color: var(--line); }
+
+/* Full-bleed band used to break the rhythm of stacked rows. */
+.band {
+  background: var(--band, var(--card));
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 68px 0;
+  margin: 72px 0;
+}
+
+/* A hairline rule that reads as a printed divider, with optional label. */
+.rule {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+  position: relative;
+}
+.rule--labelled {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: auto;
+  background: none;
+}
+.rule--labelled::before,
+.rule--labelled::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* ============================================================================
+   4. CONTROLS
+   ========================================================================== */
+
 .chip {
   display: inline-flex; align-items: center; gap: 6px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 4px 12px;
-  font-size: 0.78rem;
+  padding: 4px 11px;
+  font-size: 0.765rem;
   color: var(--muted);
   background: transparent;
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
-.chip--solid { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-weight: 600; }
-.chip--on { color: var(--ink); border-color: var(--accent); }
+.chip--solid {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: transparent;
+  font-weight: 600;
+}
+.chip--on { color: var(--ink); border-color: var(--line-strong); }
+
 .pill {
   display: inline-flex; align-items: center; gap: 6px;
-  border-radius: 999px; padding: 3px 10px;
-  font-size: 0.72rem; font-weight: 600;
+  border-radius: 999px; padding: 3px 9px;
+  font-size: 0.705rem; font-weight: 600;
+  letter-spacing: 0.01em;
 }
-.pill--yellow { background: rgba(233, 217, 81, 0.14); color: var(--yellow); }
-.pill--green  { background: rgba(123, 216, 143, 0.13); color: var(--green); }
-.pill--red    { background: rgba(232, 106, 106, 0.13); color: var(--red); }
-.pill--grey   { background: rgba(127, 127, 127, 0.14); color: var(--muted); }
-.dot { width: 6px; height: 6px; border-radius: 99px; background: currentColor; }
+.pill--yellow { background: color-mix(in srgb, var(--yellow) 14%, transparent); color: var(--yellow); }
+.pill--green  { background: color-mix(in srgb, var(--green) 14%, transparent);  color: var(--green); }
+.pill--red    { background: color-mix(in srgb, var(--red) 14%, transparent);    color: var(--red); }
+.pill--grey   { background: color-mix(in srgb, var(--muted) 14%, transparent);  color: var(--muted); }
+.dot { width: 5px; height: 5px; border-radius: 99px; background: currentColor; }
 
-/* ---------- buttons ---------- */
+/* Buttons: rect-ish, not pill. Ink-solid primary on paper. */
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
-  border-radius: 12px; padding: 10px 18px;
-  font-size: 0.9rem; font-weight: 600;
-  transition: filter 0.15s ease, transform 0.05s ease;
+  border-radius: var(--r-ctl);
+  padding: 10px 17px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  border: 1px solid transparent;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.06s ease;
 }
 .btn:active { transform: translateY(1px); }
+
 .btn--solid { background: var(--accent); color: var(--accent-ink); }
-.btn--solid:hover { filter: brightness(1.08); }
-.btn--ghost { border: 1px solid var(--line); color: var(--ink); }
-.btn--ghost:hover { border-color: var(--accent); }
-.btn--sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 9px; }
-.btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+.btn--solid:hover { background: color-mix(in srgb, var(--accent) 86%, var(--ink)); }
 
-.link-arrow { color: var(--accent); font-weight: 600; font-size: 0.88rem; display: inline-flex; gap: 6px; align-items: center; }
-.link-arrow::after { content: "→"; }
+.btn--ghost { border-color: var(--line-strong); color: var(--ink); }
+.btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-/* ---------- layout helpers ---------- */
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.btn--sm { padding: 6px 12px; font-size: 0.79rem; border-radius: 7px; }
+.btn[disabled] { opacity: 0.42; cursor: not-allowed; }
+
+.link-arrow {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.86rem;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  transition: gap 0.18s ease;
+}
+.link-arrow::after { content: "→"; transition: transform 0.18s ease; }
+.link-arrow:hover::after { transform: translateX(3px); }
+
+/* ============================================================================
+   5. LAYOUT
+   ========================================================================== */
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
 .row { display: flex; align-items: center; gap: 12px; }
 .row--between { justify-content: space-between; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .stack { display: flex; flex-direction: column; gap: 18px; }
+
+.grid2, .grid3 { display: grid; gap: 18px; }
+.grid2 { grid-template-columns: 1fr 1fr; }
+.grid3 { grid-template-columns: repeat(3, 1fr); }
+
 .sep { height: 1px; background: var(--line); border: 0; margin: 18px 0; }
 
-/* ---------- source badges (letter tiles like the real app) ---------- */
-.src {
-  width: 30px; height: 30px; border-radius: 9px;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 0.72rem; font-weight: 700; flex: none;
-  border: 1px solid var(--line); background: var(--card, #272727); color: var(--muted);
-}
-.src--r { color: #ff6a4d; } .src--l { color: #3a9df6; }
-.src--f { color: #3a9df6; } .src--x { background: #111; color: #ededf0; }
-.src--g { color: #7bd88f; } .src--fg { color: #e9d951; }
+/* grid blowout guard: items must be allowed to shrink below min-content */
+.grid2 > *, .grid3 > *, .grid2, .grid3 { min-width: 0; }
 
-/* ---------- tabs ---------- */
-.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
-.tab { padding: 9px 14px; font-size: 0.85rem; color: var(--muted); border-radius: 9px 9px 0 0; }
-.tab--on { color: var(--ink); background: var(--card); border: 1px solid var(--line); border-bottom: 0; }
+/* ---------- source monograms (replaces rainbox letter tiles) ---------- */
+.src {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  flex: none;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  letter-spacing: 0;
+}
+.src--r  { color: #c2542f; }
+.src--l  { color: #1e6fa8; }
+.src--f  { color: #1e6fa8; }
+.src--x  { color: var(--ink); }
+.src--g  { color: var(--green); }
+.src--fg { color: var(--yellow); }
+
+.app .src--r { color: #e88262; }
+.app .src--l, .app .src--f { color: #79b5e0; }
+.app .src--g { color: var(--green); }
+.app .src--fg { color: var(--yellow); }
+
+/* ---------- tabs: underline, not filled pills ---------- */
+.tabs {
+  display: flex; gap: 22px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.tab {
+  padding: 9px 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  border-radius: 0;
+  border-bottom: 1.5px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.18s ease, border-color 0.18s ease;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.tab--on { color: var(--ink); border-bottom-color: var(--accent); }
+.tab:hover { color: var(--ink); }
+
+.ptabs { display: flex; gap: 22px; margin-bottom: 16px; }
+
+/* ---------- FAQ disclosure: a typographic +/−, not a browser triangle ---------- */
+summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+summary::-webkit-details-marker { display: none; }
+summary::marker { content: ""; }
+summary::after {
+  content: "+";
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--faint);
+  flex: none;
+  transition: color 0.18s ease, transform 0.2s ease;
+}
+summary:hover::after { color: var(--accent); }
+details[open] > summary::after {
+  content: "\2212";
+  color: var(--accent);
+}
 
 /* ---------- empty states ---------- */
-.empty { border: 1px dashed var(--line); border-radius: var(--r-pane); padding: 26px; text-align: center; }
-.empty h4 { font-weight: 600; margin-bottom: 6px; }
-.empty p { color: var(--muted); font-size: 0.85rem; line-height: 1.5; max-width: 44ch; margin: 0 auto 12px; }
+.empty {
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-pane);
+  padding: 30px;
+  text-align: center;
+}
+.empty h4 {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 7px;
+}
+.empty p {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  max-width: 44ch;
+  margin: 0 auto 14px;
+}
 
 /* ---------- forms ---------- */
 .field {
-  width: 100%; background: var(--rail, #121212);
-  border: 1px solid var(--line); border-radius: 11px;
-  padding: 10px 14px; color: var(--ink); outline: none; font-size: 0.9rem;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-ctl);
+  padding: 10px 13px;
+  color: var(--ink);
+  outline: none;
+  font-size: 0.9rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
-.field:focus { border-color: var(--accent); }
+.field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
 .field::placeholder { color: var(--faint); }
+.app .field:focus { box-shadow: 0 0 0 3px rgba(199, 123, 184, 0.18); }
 
-/* ---------- app shell layout (kept in CSS so media queries can override) --- */
+/* ============================================================================
+   6. APP SHELL
+   ========================================================================== */
+
 .rail {
   width: 224px; flex: none;
   background: var(--rail);
@@ -172,43 +468,275 @@ input, textarea { font: inherit; }
   display: flex; flex-direction: column;
   position: sticky; top: 0; height: 100vh;
 }
-.main { flex: 1; min-width: 0; padding: 26px 30px 90px; }
+.main { flex: 1; min-width: 0; padding: 28px 32px 90px; }
 
-/* grid blowout guard: items must be allowed to shrink below min-content */
-.grid2 > *, .grid3 > *, .grid2, .grid3 { min-width: 0; }
-.pane { min-width: 0; }
+/* Rail navigation active state. NavLink clears background inline, so the
+   highlight has to be re-stated at equal-or-higher specificity here. */
+.app .rail .tab.tab--on {
+  color: var(--ink);
+  background: var(--accent-wash);
+}
+.app .rail .tab.tab--on .rail-icon { color: var(--accent); }
 
-/* tab rows wrap instead of overflowing (ui Tabs + project tabs) */
-.tabs, .ptabs { flex-wrap: wrap; }
-.ptabs { display: flex; gap: 2px; margin-bottom: 16px; }
-.sel { width: auto; flex: 1 1 150px; min-width: 0; }
+/* ============================================================================
+   7. MISC
+   ========================================================================== */
 
-/* ---------- misc ---------- */
-.kbd { border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; font-size: 0.7rem; color: var(--muted); }
+.kbd {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 1px 5px;
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
 .spin { animation: spin 1s linear infinite; display: inline-block; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.fade-in { animation: fade 0.35s ease; }
-@keyframes fade { from { opacity: 0; transform: translateY(4px); } }
+
+.fade-in { animation: fade 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Stagger a list without extra JS. */
+.stagger > * { animation: fade 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.stagger > *:nth-child(1) { animation-delay: 0.02s; }
+.stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.stagger > *:nth-child(3) { animation-delay: 0.1s; }
+.stagger > *:nth-child(4) { animation-delay: 0.14s; }
+.stagger > *:nth-child(5) { animation-delay: 0.18s; }
+.stagger > *:nth-child(6) { animation-delay: 0.22s; }
+.stagger > *:nth-child(7) { animation-delay: 0.26s; }
+
 .scroll-y { overflow-y: auto; }
 
-/* ============================================================
-   UI/UX Pro Max polish layer
-   (focus visibility, reduced motion, touch targets, contrast,
-    hover affordance, responsive breakpoints, SVG spinner)
-   ============================================================ */
+/* The brand mark: foxglove bloom on a stem. Reads at 16px. */
+.mark { color: var(--accent); display: inline-flex; flex: none; }
+.wordmark {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+}
 
-/* --- keyboard focus rings (never removed without replacement) --- */
+/* ============================================================================
+   7. AUTH — editorial split: plum plate + paper form
+   ========================================================================== */
+
+.auth {
+  display: grid;
+  grid-template-columns: 1.02fr 1fr;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.auth__plate {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 44px 48px;
+  background: #2b1026;
+  color: #f7edf3;
+  isolation: isolate;
+}
+
+/* Soft foxglove wash rather than a flat block of colour. */
+.auth__plate::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  z-index: -2;
+  background:
+    radial-gradient(52% 44% at 26% 18%, rgba(199, 123, 184, 0.34), transparent 68%),
+    radial-gradient(46% 40% at 82% 84%, rgba(122, 46, 110, 0.55), transparent 70%),
+    radial-gradient(40% 34% at 64% 46%, rgba(232, 176, 188, 0.14), transparent 70%);
+}
+
+/* Hairline column grid — the plate reads as a printed page, not a colour block. */
+.auth__plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(247, 237, 243, 0.07) 0 1px,
+    transparent 1px 25%
+  );
+  pointer-events: none;
+}
+
+.auth__plate .mark { color: #eab9dd; }
+.auth__plate .wordmark { color: #f7edf3; }
+.auth__plate .eyebrow { color: rgba(247, 237, 243, 0.5); }
+
+.auth__quote {
+  font-family: "Fraunces", Georgia, serif;
+  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 96;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.4vw, 2.15rem);
+  line-height: 1.2;
+  letter-spacing: -0.014em;
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+.auth__form {
+  display: grid;
+  place-items: center;
+  padding: 44px 24px;
+  background: var(--bg);
+}
+
+.auth__card { width: min(372px, 100%); }
+
+@media (max-width: 900px) {
+  .auth { grid-template-columns: 1fr; }
+  .auth__plate { display: none; }
+}
+
+/* ============================================================================
+   8. PAGE COMPOSITION
+   Rhythm devices: asymmetric hero, sticky splits, full-bleed bands, hairline
+   tables. A page should alternate texture, not stack identical rows.
+   ========================================================================== */
+
+/* Asymmetric hero: statement left, live artefact right. */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 64px;
+  align-items: start;
+  padding-top: 88px;
+}
+
+.hero__strip { padding: 13px 0 0; flex-wrap: wrap; gap: 10px; }
+
+/* Split: heading column holds position while the body scrolls past it. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+  gap: 64px;
+  align-items: start;
+}
+.split__head { position: sticky; top: 104px; align-self: start; }
+.split--flip .split__head { order: 2; }
+
+/* Oversized section statement — the band's headline voice. */
+.statement {
+  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 96;
+  font-weight: 460;
+  font-size: clamp(1.9rem, 3.8vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+  max-width: 24ch;
+  text-wrap: balance;
+  margin-top: 16px;
+}
+
+.band__head { max-width: 780px; }
+.band--tight { padding: 58px 0; }
+
+/* Three-across numbered steps, rules instead of cards. */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 34px;
+  border-top: 1px solid var(--line-strong);
+  margin-top: 42px;
+}
+.step {
+  padding: 18px 0 24px;
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+}
+.step__n { font-size: 0.68rem; letter-spacing: 0.14em; color: var(--accent); display: block; margin-bottom: 12px; }
+
+/* Two-document trail: the ask, then the draft. */
+.thread {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 18px;
+  margin-top: 20px;
+  align-items: start;
+}
+
+/* Hairline specimen table for the source inventory. */
+.tile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 54px;
+  border-top: 1px solid var(--line-strong);
+  margin-top: 40px;
+}
+.tile {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+}
+.tile__body { flex: 1; min-width: 0; }
+.tile__cad {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+  white-space: nowrap;
+  padding-top: 4px;
+}
+
+/* FAQ as ruled rows, not a card. */
+.faq { border-top: 1px solid var(--line-strong); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { padding: 17px 0; font-weight: 600; font-size: 0.95rem; }
+.faq p { padding-bottom: 18px; line-height: 1.62; max-width: 62ch; }
+
+/* Dark finale band — the page's last note, inverted. */
+.band--ink {
+  background: #17140f;
+  color: #faf7f0;
+  border-color: rgba(250, 247, 240, 0.1);
+  margin-bottom: 0;
+}
+.band--ink .eyebrow { color: rgba(250, 247, 240, 0.42); }
+.band--ink .lede { color: rgba(250, 247, 240, 0.64); }
+.band--ink .mark { color: #eab9dd; }
+.band--ink .btn--solid { background: #faf7f0; color: #17140f; }
+.band--ink .btn--solid:hover { background: #fffdf8; }
+.band--ink .btn--ghost { border-color: rgba(250, 247, 240, 0.28); color: #faf7f0; }
+.band--ink .btn--ghost:hover { border-color: #eab9dd; color: #eab9dd; }
+
+/* When a page ends on the inverted band, the footer should butt up to it
+   rather than float 100px below, leaving a dead strip of paper. */
+.mk-foot {
+  border-top: 1px solid var(--line);
+  margin-top: 100px;
+  padding: 52px 0 32px;
+}
+.mk:has(main .band--ink) > .mk-foot { margin-top: 0; padding-top: 40px; }
+
+/* ============================================================================
+   9. ACCESSIBILITY, MOTION, RESPONSIVE
+   ========================================================================== */
+
 .btn:focus-visible, .chip:focus-visible, .tab:focus-visible,
 .field:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  border-radius: 10px;
+  border-radius: 6px;
 }
 
-/* --- selection --- */
-::selection { background: rgba(122, 137, 230, 0.35); }
-
-/* --- respect motion preferences --- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -219,45 +747,52 @@ input, textarea { font: inherit; }
 }
 
 /* --- hover affordance without layout shift --- */
-.pane--hover { cursor: pointer; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-.app .pane--hover:hover { border-color: rgba(122, 137, 230, 0.55); box-shadow: 0 10px 30px -16px rgba(0, 0, 0, 0.55); }
-.mk  .pane--hover:hover { border-color: rgba(122, 137, 230, 0.5);  box-shadow: 0 14px 36px -18px rgba(29, 27, 46, 0.3); }
+.pane--hover { cursor: pointer; transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; }
+.mk .pane--hover:hover { border-color: var(--line-strong); box-shadow: 0 18px 40px -24px rgba(23, 20, 15, 0.3); }
+.app .pane--hover:hover { border-color: var(--line-strong); }
 
-.chip, .tab { transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease; }
-button.chip:hover, .tab:hover { color: var(--ink); border-color: var(--accent); }
+button.chip:hover { color: var(--ink); border-color: var(--line-strong); }
 
 /* --- minimum touch targets (44px) --- */
 .tab, button.chip { min-height: 40px; display: inline-flex; align-items: center; }
-.app nav .tab { min-height: 40px; }
 
-/* --- SVG spinner (replaces the ◌ glyph) --- */
+/* --- SVG spinner --- */
 .spinner {
   width: 13px; height: 13px; flex: none;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.25);
-  border-top-color: currentColor;
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--accent);
   animation: spin 0.7s linear infinite;
 }
-.app .spinner { border-color: rgba(255, 255, 255, 0.2); border-top-color: var(--accent); }
-.btn--solid .spinner { border-color: rgba(18, 18, 42, 0.25); border-top-color: var(--accent-ink); }
+.btn--solid .spinner { border-color: rgba(255, 253, 248, 0.3); border-top-color: var(--accent-ink); }
 
-/* --- native scrollbars --- */
-.app .scroll-y::-webkit-scrollbar, .scroll-y::-webkit-scrollbar { width: 8px; }
-.app .scroll-y::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 8px; }
+/* --- scrollbars --- */
+.scroll-y::-webkit-scrollbar { width: 8px; }
+.scroll-y::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 8px; }
 
-/* --- responsive: tablets --- */
+/* --- responsive --- */
 @media (max-width: 1024px) {
   .grid3 { grid-template-columns: repeat(2, 1fr); }
+
+  .hero { grid-template-columns: 1fr; gap: 40px; padding-top: 64px; }
+  .split { display: block; }
+  .split__head { position: static; margin-bottom: 30px; }
+  .split--flip .split__head { order: 0; }
+  .tile-grid { column-gap: 34px; }
 }
 
-/* --- responsive: phones + narrow tablets --- */
 @media (max-width: 860px) {
   .grid2, .grid3 { grid-template-columns: 1fr; }
 
-  /* collapse the app rail to an icon strip */
+  .steps { grid-template-columns: 1fr; }
+  .thread { grid-template-columns: 1fr; }
+  .tile-grid { grid-template-columns: 1fr; }
+  .statement { font-size: 1.75rem; }
+
   .rail { width: 62px !important; padding: 14px 8px !important; }
   .main { padding: 18px 14px 90px !important; }
-  .ptabs .tab, .tabs .tab { padding: 8px 10px; font-size: 0.8rem; }
+  .ptabs .tab, .tabs .tab { padding: 8px 0; font-size: 0.8rem; }
+  .tabs, .ptabs { gap: 16px; }
   .row { flex-wrap: wrap; }
   .rail-word, .rail-sub, .app nav .tab .rail-word,
   .app > aside .eyebrow, .app > aside > .row .small { display: none; }
@@ -265,17 +800,20 @@ button.chip:hover, .tab:hover { color: var(--ink); border-color: var(--accent); 
   .app > aside .pane--railwide { display: none; }
   .app > main { padding: 18px 14px 90px; }
 
-  /* chat dock nearly full width */
   .dock { right: 10px !important; left: 76px; width: auto !important; }
+
+  .band { padding: 46px 0; margin: 52px 0; }
 }
 
 @media (max-width: 640px) {
-  .h1 { font-size: 1.55rem; }
-  .h2 { font-size: 1.2rem; }
-  .lede { font-size: 0.92rem; }
-  .wrap { padding: 0 16px; }
+  .display-xl { font-size: clamp(2.2rem, 10vw, 3rem); }
+  .h1 { font-size: 1.7rem; }
+  .h2 { font-size: 1.35rem; }
+  .lede { font-size: 0.96rem; }
+  .wrap { padding: 0 18px; }
   .mk header .row { gap: 10px; }
   .mk header nav.mk-nav { display: none; }
   .foot-grid { grid-template-columns: 1fr 1fr !important; }
   .dock { left: 10px; }
+  .wordmark { font-size: 0.9rem; letter-spacing: 0.1em; }
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PLAN_TIERS } from '../mock/jobs.js'
-import { Btn, Chip, Eyebrow, SourceBadge, Icons } from '../ui/index.jsx'
+import { Btn, Chip, Eyebrow, SourceBadge, Icons, Mark, Rule } from '../ui/index.jsx'
 
 const BIZ = 'Pinegrove Roofing & Exteriors'
 
@@ -100,49 +100,71 @@ const FAQS = [
 ]
 
 const TILE = {
-  width: 26, height: 26, borderRadius: 8, flex: 'none',
+  width: 26, height: 26, borderRadius: 6, flex: 'none',
   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-  fontWeight: 700, fontSize: '0.8rem',
+  fontWeight: 600, fontSize: '0.78rem',
 }
-const TILE_HOLLOW = { ...TILE, color: 'var(--accent)', border: '1px solid var(--accent)' }
 const TILE_SOLID = { ...TILE, background: 'var(--accent)', color: 'var(--accent-ink)' }
 
-function Section({ eyebrow, title, intro, children, top = 84 }) {
+/* ---------------------------------------------------------------------------
+   Composition primitives
+   ------------------------------------------------------------------------- */
+
+/* Heading column on the left holds position while the artefact column scrolls
+   past it. The main rhythm device: a page that alternates, not a stack. */
+function Split({ index, eyebrow, title, intro, aside, children, top = 108, flip }) {
   return (
     <section className="wrap" style={{ paddingTop: top }}>
-      <div style={{ maxWidth: 760 }}>
-        {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-        {title ? (
-          <h2 className="h2" style={{ fontSize: '1.55rem', marginTop: 10, marginBottom: intro ? 10 : 0 }}>
-            {title}
-          </h2>
-        ) : null}
-        {intro ? <p className="lede">{intro}</p> : null}
+      <div className={`split${flip ? ' split--flip' : ''}`}>
+        <div className="split__head">
+          <Eyebrow index={index}>{eyebrow}</Eyebrow>
+          {title && <h2 className="h2" style={{ margin: '14px 0 0' }}>{title}</h2>}
+          {intro && <p className="lede" style={{ marginTop: 14 }}>{intro}</p>}
+          {aside}
+        </div>
+        <div className="split__body">{children}</div>
       </div>
-      {children}
     </section>
   )
 }
 
-/* A row of example asks that rotates every 3 seconds. */
-function AskRow() {
+/* Section heading with no sticky column — used inside full-bleed bands. */
+function BandHead({ index, eyebrow, title, intro, statement }) {
+  return (
+    <div className="band__head">
+      <Eyebrow index={index}>{eyebrow}</Eyebrow>
+      {statement ? (
+        <h2 className="statement">{title}</h2>
+      ) : (
+        <h2 className="h2" style={{ margin: '14px 0 0' }}>{title}</h2>
+      )}
+      {intro && <p className="lede" style={{ marginTop: 14 }}>{intro}</p>}
+    </div>
+  )
+}
+
+/* ---------------------------------------------------------------------------
+   Hero — statement left, live artefact right
+   ------------------------------------------------------------------------- */
+
+function AskStack() {
   const [tick, setTick] = useState(0)
   useEffect(() => {
     const id = setInterval(() => setTick((t) => t + 1), 3000)
     return () => clearInterval(id)
   }, [])
   return (
-    <div className="row" style={{ gap: 14, flexWrap: 'wrap', marginTop: 34 }}>
+    <div className="stack" style={{ gap: 10 }}>
       {[0, 1, 2].map((k) => {
         const i = (tick + k) % ASKS.length
         const a = ASKS[i]
         return (
-          <div key={i} className="pane fade-in" style={{ padding: 16, flex: '1 1 250px', minWidth: 0 }}>
-            <div className="row" style={{ gap: 10, marginBottom: 10 }}>
+          <div key={i} className="pane fade-in" style={{ padding: 15 }}>
+            <div className="row" style={{ gap: 9, marginBottom: 9 }}>
               <SourceBadge src={a.src} />
               <span className="muted small">{a.via}</span>
             </div>
-            <p className="small" style={{ lineHeight: 1.55 }}>{a.q}</p>
+            <p className="small" style={{ lineHeight: 1.5 }}>{a.q}</p>
           </div>
         )
       })}
@@ -152,116 +174,156 @@ function AskRow() {
 
 function Hero() {
   return (
-    <section className="wrap" style={{ paddingTop: 92 }}>
-      <Eyebrow>Foxglove</Eyebrow>
-      <h1
-        className="h1"
-        style={{ fontSize: 'clamp(2.3rem, 5vw, 3.1rem)', lineHeight: 1.12, letterSpacing: '-0.015em', margin: '16px 0 0', maxWidth: 840 }}
-      >
-        Be found by the people already searching for you.
-      </h1>
-      <AskRow />
-      <div style={{ maxWidth: 720, marginTop: 42 }}>
-        <p className="lede" style={{ fontSize: '1.05rem', lineHeight: 1.6 }}>
-          Foxglove watches the conversations, searches, and AI answers where your customers look
-          for help. It drafts the replies, posts, and pages to show up there, and every Monday
-          tells you what to do next.
+    <>
+      <section className="wrap hero">
+        <div className="hero__text">
+          <Eyebrow index="00">Foxglove</Eyebrow>
+          <h1 className="display-xl" style={{ margin: '22px 0 0' }}>
+            Be found by the people already searching for you.
+          </h1>
+          <p className="lede" style={{ marginTop: 28 }}>
+            Foxglove watches the conversations, searches, and AI answers where your customers look
+            for help. It drafts the replies, posts, and pages to show up there, and every Monday
+            tells you what to do next.
+          </p>
+          <div className="row" style={{ marginTop: 30, flexWrap: 'wrap' }}>
+            <Btn to="/signin" solid>Get started</Btn>
+            <Btn to="/pricing" ghost>See pricing</Btn>
+          </div>
+        </div>
+
+        <aside className="hero__aside">
+          <div className="row row--between" style={{ marginBottom: 13 }}>
+            <span className="eyebrow">Being asked now</span>
+            <span className="eyebrow" style={{ color: 'var(--accent)' }}>Live</span>
+          </div>
+          <AskStack />
+        </aside>
+      </section>
+
+      <div className="wrap" style={{ paddingTop: 64 }}>
+        <Rule />
+        <div className="row row--between hero__strip">
+          <span className="eyebrow">Listening on</span>
+          <span className="mono small" style={{ color: 'var(--muted)' }}>
+            Reddit · LinkedIn · Facebook · X · Google · AI answers
+          </span>
+        </div>
+      </div>
+    </>
+  )
+}
+
+/* ---------------------------------------------------------------------------
+   01 — How it works: numbered steps, then the two-document trail
+   ------------------------------------------------------------------------- */
+
+function HowItWorks() {
+  return (
+    <section className="wrap" style={{ paddingTop: 112 }}>
+      <div style={{ maxWidth: 800 }}>
+        <Eyebrow index="01">How it works</Eyebrow>
+        <h2 className="h2" style={{ margin: '14px 0 0' }}>Found, drafted, and ready for you to post.</h2>
+        <p className="lede" style={{ marginTop: 14 }}>
+          Every day Foxglove reads the places your buyers ask for help. When someone asks for what
+          you sell, the reply is already written.
         </p>
-        <div className="row" style={{ marginTop: 26, flexWrap: 'wrap' }}>
-          <Btn to="/signin" solid>Get started</Btn>
-          <Btn to="/pricing" ghost>See pricing</Btn>
+      </div>
+
+      <div className="steps">
+        {STEPS.map((s, i) => (
+          <div key={s.t} className="step">
+            <span className="mono step__n">{String(i + 1).padStart(2, '0')}</span>
+            <h3 className="h3">{s.t}</h3>
+            <p className="muted small" style={{ marginTop: 5 }}>{s.d}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="thread">
+        <div className="pane" style={{ padding: 18 }}>
+          <div className="row" style={{ gap: 10, marginBottom: 11 }}>
+            <SourceBadge src="reddit" />
+            <span className="small">
+              <strong>{EXAMPLE_POST.via}</strong> <span className="faint">· {EXAMPLE_POST.when}</span>
+            </span>
+          </div>
+          <p style={{ fontWeight: 600, lineHeight: 1.45 }}>{EXAMPLE_POST.title}</p>
+          <p className="muted small" style={{ marginTop: 7, lineHeight: 1.55 }}>{EXAMPLE_POST.body}</p>
+          <p className="small" style={{ marginTop: 13 }}>
+            <span className="faint">Found for </span><strong>{BIZ}</strong>
+            <span className="faint">, a roofer in Central Texas</span>
+          </p>
+        </div>
+
+        <div className="pane" style={{ padding: 18 }}>
+          <div className="row" style={{ gap: 9, marginBottom: 11 }}>
+            <span className="src" style={{ color: 'var(--accent)' }}><Icons.flower size={13} /></span>
+            <span className="eyebrow">Foxglove drafted a reply</span>
+          </div>
+          <p className="small" style={{ lineHeight: 1.62 }}>{EXAMPLE_REPLY}</p>
+          <p className="faint small" style={{ marginTop: 13 }}>Written in Pinegrove’s voice. Edit anything.</p>
+        </div>
+      </div>
+
+      <div className="pane" style={{ marginTop: 14, padding: '16px 20px' }}>
+        <div className="row row--between" style={{ flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <h3 className="h3">Ready for you to post</h3>
+            <p className="faint small" style={{ marginTop: 3 }}>Foxglove never posts for you.</p>
+          </div>
+          <div className="row" style={{ gap: 8, flexWrap: 'wrap' }}>
+            <Chip on><Icons.copy size={12} /> Copy reply</Chip>
+            <Chip on><Icons.arrow size={12} /> Open the post</Chip>
+          </div>
         </div>
       </div>
     </section>
   )
 }
 
-function HowItWorks() {
-  return (
-    <Section
-      eyebrow="How it works"
-      title="Found, drafted, and ready for you to post."
-      intro="Every day Foxglove reads the places your buyers ask for help. When someone asks for what you sell, the reply is already written."
-    >
-      <div className="grid2" style={{ marginTop: 30, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'start' }}>
-        <div className="stack" style={{ gap: 18 }}>
-          {STEPS.map((s, i) => (
-            <div key={s.t} className="row" style={{ gap: 14, alignItems: 'flex-start' }}>
-              <span className="mono" style={TILE_HOLLOW}>{i + 1}</span>
-              <div>
-                <h3 className="h3">{s.t}</h3>
-                <p className="muted small" style={{ marginTop: 4, lineHeight: 1.55 }}>{s.d}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="stack" style={{ gap: 12 }}>
-          <div className="pane" style={{ padding: 16 }}>
-            <div className="row" style={{ gap: 10, marginBottom: 10 }}>
-              <SourceBadge src="reddit" />
-              <span className="small">
-                <strong>{EXAMPLE_POST.via}</strong> <span className="faint">· {EXAMPLE_POST.when}</span>
-              </span>
-            </div>
-            <p style={{ fontWeight: 600, lineHeight: 1.45 }}>{EXAMPLE_POST.title}</p>
-            <p className="muted small" style={{ marginTop: 6, lineHeight: 1.55 }}>{EXAMPLE_POST.body}</p>
-            <p className="small" style={{ marginTop: 12 }}>
-              <span className="faint">Found for </span><strong>{BIZ}</strong>
-              <span className="faint">, a roofer in Central Texas</span>
-            </p>
-          </div>
-          <div className="pane" style={{ padding: 16 }}>
-            <div className="row" style={{ gap: 10, marginBottom: 10 }}>
-              <span className="src" style={{ color: 'var(--accent)' }}><Icons.flower size={14} /></span>
-              <span className="eyebrow">Foxglove drafted a reply</span>
-            </div>
-            <p className="small" style={{ lineHeight: 1.6 }}>{EXAMPLE_REPLY}</p>
-            <p className="faint small" style={{ marginTop: 12 }}>Written in Pinegrove’s voice. Edit anything.</p>
-          </div>
-          <div className="pane" style={{ padding: 16, borderColor: 'var(--accent)' }}>
-            <h3 className="h3">Ready for you to post</h3>
-            <div className="row" style={{ gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-              <Chip on>Copy reply</Chip>
-              <Chip on>Open the post</Chip>
-            </div>
-            <p className="faint small" style={{ marginTop: 12 }}>Foxglove never posts for you.</p>
-          </div>
-        </div>
-      </div>
-    </Section>
-  )
-}
+/* ---------------------------------------------------------------------------
+   02 — Where it looks: full-bleed band, statement + hairline specimen table
+   ------------------------------------------------------------------------- */
 
-function SourceList() {
+function SourceBand() {
   return (
-    <Section
-      eyebrow="Where it looks"
-      title="Someone is asking for what you sell right now."
-      intro="Foxglove reads the places your buyers ask for help, and checks how you show up when they search or ask an AI assistant."
-    >
-      <div className="stack" style={{ gap: 10, marginTop: 30 }}>
-        {SOURCES.map((s) => (
-          <div key={s.name} className="pane row row--between" style={{ padding: '13px 18px', gap: 14, flexWrap: 'wrap' }}>
-            <div className="row" style={{ gap: 12, minWidth: 0 }}>
+    <section className="band">
+      <div className="wrap">
+        <BandHead
+          index="02"
+          eyebrow="Where it looks"
+          title="Someone is asking for what you sell right now."
+          intro="Foxglove reads the places your buyers ask for help, and checks how you show up when they search or ask an AI assistant."
+          statement
+        />
+
+        <div className="tile-grid">
+          {SOURCES.map((s) => (
+            <div key={s.name} className="tile">
               {s.badge ? (
                 <SourceBadge src={s.badge} />
               ) : (
-                <span className="src" style={{ color: s.mark === 'ai' ? 'var(--accent)' : '#ffffff' }}>
+                <span className="src" style={{ color: s.mark === 'ai' ? 'var(--accent)' : 'var(--ink)' }}>
                   {s.mark === 'ai' ? 'AI' : 'vs'}
                 </span>
               )}
-              <div style={{ minWidth: 0 }}>
+              <div className="tile__body">
                 <h3 className="h3">{s.name}</h3>
-                <p className="muted small" style={{ marginTop: 2 }}>{s.desc}</p>
+                <p className="muted small" style={{ marginTop: 3 }}>{s.desc}</p>
               </div>
+              <span className="tile__cad">{s.cadence}</span>
             </div>
-            <Chip>{s.cadence}</Chip>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </Section>
+    </section>
   )
 }
+
+/* ---------------------------------------------------------------------------
+   03 — Every Monday: text left, the artefact right
+   ------------------------------------------------------------------------- */
 
 function EmailPane() {
   return (
@@ -270,9 +332,11 @@ function EmailPane() {
         <span className="muted small">From: Foxglove · Monday, 8:00 AM</span>
         <Chip>Example</Chip>
       </div>
-      <div style={{ padding: 18 }}>
-        <h4 style={{ fontWeight: 600, lineHeight: 1.4 }}>Your week at Pinegrove Roofing: three things worth doing</h4>
-        <div className="stack" style={{ gap: 14, marginTop: 14 }}>
+      <div style={{ padding: 20 }}>
+        <h4 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.12rem', fontWeight: 500, lineHeight: 1.35 }}>
+          Your week at Pinegrove Roofing: three things worth doing
+        </h4>
+        <div className="stack" style={{ gap: 15, marginTop: 16 }}>
           {MONDAY_ITEMS.map((it, i) => (
             <div key={it.t} className="row" style={{ gap: 12, alignItems: 'flex-start' }}>
               <span className="mono" style={TILE_SOLID}>{i + 1}</span>
@@ -284,7 +348,7 @@ function EmailPane() {
           ))}
         </div>
       </div>
-      <div style={{ padding: '13px 18px', borderTop: '1px solid var(--line)', background: 'rgba(122,137,230,0.06)' }}>
+      <div style={{ padding: '13px 18px', borderTop: '1px solid var(--line)', background: 'var(--accent-wash)' }}>
         <p className="muted small">Last week you posted three replies. 41 visits came from their links.</p>
       </div>
     </div>
@@ -292,124 +356,161 @@ function EmailPane() {
 }
 
 function MondayPlan() {
+  const notes = (
+    <div className="stack" style={{ gap: 15, marginTop: 26 }}>
+      {MONDAY_NOTES.map((n) => (
+        <p key={n} className="muted small row" style={{ gap: 10, lineHeight: 1.55, alignItems: 'flex-start' }}>
+          <span style={{ color: 'var(--accent)', flex: 'none', display: 'inline-flex', paddingTop: 2 }}>
+            <Icons.flower size={13} />
+          </span>
+          {n}
+        </p>
+      ))}
+    </div>
+  )
+
   return (
-    <Section
+    <Split
+      index="03"
       eyebrow="Every Monday"
       title="Every Monday, the three things worth doing."
       intro="Foxglove ranks the week’s work by what is most likely to get you found, says why, and has the drafts waiting."
+      aside={notes}
     >
-      <div className="grid2" style={{ marginTop: 30, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'start' }}>
-        <div className="stack" style={{ gap: 14 }}>
-          {MONDAY_NOTES.map((n) => (
-            <p key={n} className="muted small row" style={{ gap: 10, lineHeight: 1.55 }}>
-              <span style={{ color: 'var(--accent)', flex: 'none', display: 'inline-flex' }}><Icons.flower size={13} /></span>
-              {n}
-            </p>
-          ))}
-        </div>
-        <EmailPane />
-      </div>
-    </Section>
+      <EmailPane />
+    </Split>
   )
 }
 
+/* ---------------------------------------------------------------------------
+   04 — Who it's for
+   ------------------------------------------------------------------------- */
+
 function Paths() {
   return (
-    <Section eyebrow="Who it’s for" title="Built for founders, and the agencies that help them.">
-      <div className="grid2" style={{ marginTop: 30, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
-        <div className="pane pane--pad stack" style={{ gap: 10 }}>
+    <section className="wrap" style={{ paddingTop: 108 }}>
+      <div style={{ maxWidth: 800 }}>
+        <Eyebrow index="04">Who it’s for</Eyebrow>
+        <h2 className="h2" style={{ margin: '14px 0 0' }}>Built for founders, and the agencies that help them.</h2>
+      </div>
+
+      <div className="grid2" style={{ marginTop: 38 }}>
+        <div className="pane pane--pad pane--feature stack" style={{ gap: 12 }}>
           <Eyebrow>For founders</Eyebrow>
-          <h3 className="h3" style={{ fontSize: '1.12rem' }}>Growth work, without a growth hire.</h3>
-          <p className="muted small" style={{ lineHeight: 1.6 }}>
+          <h3 className="h2" style={{ fontSize: '1.45rem' }}>Growth work, without a growth hire.</h3>
+          <p className="muted small" style={{ lineHeight: 1.62 }}>
             You built something worth finding. Foxglove does the searching, reading, and first
             drafts so you can get back to building.
           </p>
-          <div style={{ marginTop: 6 }}>
+          <div style={{ marginTop: 'auto', paddingTop: 10 }}>
             <Btn to="/signin" ghost sm>Get started</Btn>
           </div>
         </div>
-        <div className="pane pane--pad stack" style={{ gap: 10 }}>
+
+        <div className="pane pane--pad stack" style={{ gap: 12 }}>
           <Eyebrow>For agencies</Eyebrow>
-          <h3 className="h3" style={{ fontSize: '1.12rem' }}>Every client, one account.</h3>
-          <p className="muted small" style={{ lineHeight: 1.6 }}>
+          <h3 className="h2" style={{ fontSize: '1.45rem' }}>Every client, one account.</h3>
+          <p className="muted small" style={{ lineHeight: 1.62 }}>
             Add each client as a business. Every plan includes unlimited businesses and shares
             credits across them.
           </p>
-          <div style={{ marginTop: 6 }}>
-            <a
-              className="link-arrow"
-              href="mailto:hello@foxglove.example?subject=Foxglove%20for%20my%20agency"
-            >
+          <div style={{ marginTop: 'auto', paddingTop: 10 }}>
+            <a className="link-arrow" href="mailto:hello@foxglove.example?subject=Foxglove%20for%20my%20agency">
               Talk to us about agencies
             </a>
           </div>
         </div>
       </div>
-    </Section>
+    </section>
   )
 }
 
-function PricingTrio() {
+/* ---------------------------------------------------------------------------
+   05 — Pricing, on a band
+   ------------------------------------------------------------------------- */
+
+function PricingBand() {
   return (
-    <Section
-      eyebrow="Pricing"
-      title="Every feature on every plan."
-      intro="Plans differ only in how many credits arrive each month. Billed monthly, cancel any time."
-    >
-      <div className="grid3" style={{ marginTop: 30, gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
-        {Object.values(PLAN_TIERS).map((t) => (
-          <div key={t.name} className="pane pane--pad stack" style={{ gap: 6 }}>
-            <h3 className="h3">{t.publicName}</h3>
-            <div className="row" style={{ gap: 7, alignItems: 'baseline', marginTop: 4 }}>
-              <span className="mono" style={{ fontSize: '1.8rem', fontWeight: 600, letterSpacing: '-0.02em' }}>
-                ${t.monthlyUsd}
-              </span>
-              <span className="muted small">a month</span>
+    <section className="band">
+      <div className="wrap">
+        <BandHead
+          index="05"
+          eyebrow="Pricing"
+          title="Every feature on every plan."
+          intro="Plans differ only in how many credits arrive each month. Billed monthly, cancel any time."
+        />
+
+        <div className="grid3" style={{ marginTop: 38 }}>
+          {Object.values(PLAN_TIERS).map((t) => (
+            <div key={t.name} className="pane pane--pad stack" style={{ gap: 5 }}>
+              <h3 className="h3">{t.publicName}</h3>
+              <div className="row" style={{ gap: 7, alignItems: 'baseline', marginTop: 8 }}>
+                <span className="display" style={{ fontSize: '2.15rem', fontWeight: 500, letterSpacing: '-0.03em', lineHeight: 1 }}>
+                  ${t.monthlyUsd}
+                </span>
+                <span className="muted small">a month</span>
+              </div>
+              <p className="muted small" style={{ marginTop: 4 }}>
+                {t.credits.toLocaleString('en-US')} credits a month
+              </p>
+              <div style={{ marginTop: 16 }}>
+                <Btn to="/signin" solid sm>Get started</Btn>
+              </div>
             </div>
-            <p className="muted small">{t.credits.toLocaleString('en-US')} credits a month</p>
-            <div style={{ marginTop: 12 }}>
-              <Btn to="/signin" solid>Get started</Btn>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        <div className="row row--between" style={{ marginTop: 24, flexWrap: 'wrap', gap: 12 }}>
+          <p className="muted small">
+            Create your account, then choose your plan at checkout. Move to a bigger plan any time.
+          </p>
+          <Link className="link-arrow" to="/pricing">How credits work</Link>
+        </div>
       </div>
-      <p className="muted small" style={{ marginTop: 18 }}>
-        Create your account, then choose your plan at checkout. Move to a bigger plan any time.
-      </p>
-      <Link className="link-arrow" to="/pricing" style={{ marginTop: 8 }}>How credits work</Link>
-    </Section>
+    </section>
   )
 }
+
+/* ---------------------------------------------------------------------------
+   06 — FAQ as ruled rows
+   ------------------------------------------------------------------------- */
 
 function Faq() {
   return (
-    <Section eyebrow="FAQ" title="Questions, answered.">
-      <div className="pane" style={{ marginTop: 30, padding: '2px 22px' }}>
-        {FAQS.map((f, i) => (
-          <details key={f.q} style={{ borderBottom: i < FAQS.length - 1 ? '1px solid var(--line)' : 'none' }}>
-            <summary style={{ padding: '15px 0', fontWeight: 600, fontSize: '0.92rem', cursor: 'pointer' }}>
-              {f.q}
-            </summary>
-            <p className="muted small" style={{ paddingBottom: 16, lineHeight: 1.6, maxWidth: '62ch' }}>
-              {f.a}
-            </p>
+    <Split index="06" eyebrow="FAQ" title="Questions, answered.">
+      <div className="faq">
+        {FAQS.map((f) => (
+          <details key={f.q}>
+            <summary>{f.q}</summary>
+            <p className="muted small">{f.a}</p>
           </details>
         ))}
       </div>
-    </Section>
+    </Split>
   )
 }
 
+/* ---------------------------------------------------------------------------
+   Closing — inverted band
+   ------------------------------------------------------------------------- */
+
 function Closing() {
   return (
-    <section className="wrap" style={{ paddingTop: 96, textAlign: 'center' }}>
-      <h2 className="h1" style={{ fontSize: 'clamp(1.9rem, 3.5vw, 2.5rem)', fontWeight: 300 }}>
-        See who is already asking.
-      </h2>
-      <p className="lede" style={{ margin: '14px auto 26px' }}>
-        Tell Foxglove about your business and see what it finds this week.
-      </p>
-      <Btn to="/signin" solid>Get started</Btn>
+    <section className="band band--ink">
+      <div className="wrap" style={{ textAlign: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 26 }}>
+          <Mark size={26} />
+        </div>
+        <h2 className="display-xl" style={{ maxWidth: '17ch', margin: '0 auto' }}>
+          See who is already asking.
+        </h2>
+        <p className="lede" style={{ margin: '18px auto 30px', maxWidth: '42ch' }}>
+          Tell Foxglove about your business and see what it finds this week.
+        </p>
+        <div className="row" style={{ justifyContent: 'center' }}>
+          <Btn to="/signin" solid>Get started</Btn>
+        </div>
+      </div>
     </section>
   )
 }
@@ -419,10 +520,10 @@ export default function Home() {
     <main>
       <Hero />
       <HowItWorks />
-      <SourceList />
+      <SourceBand />
       <MondayPlan />
       <Paths />
-      <PricingTrio />
+      <PricingBand />
       <Faq />
       <Closing />
     </main>
